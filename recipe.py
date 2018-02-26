@@ -518,7 +518,7 @@ class Table(Frame):
     def on_change_data(self, callback):
         self._on_change_data = callback
 
-if __name__ == "__main__":
+"""if __name__ == "__main__":
     try:
         from Tkinter import Tk
     except ImportError:
@@ -538,4 +538,4 @@ if __name__ == "__main__":
     root.update()
     root.geometry("%sx%s"%(root.winfo_reqwidth(),250))
 
-    root.mainloop()
+    root.mainloop()"""
