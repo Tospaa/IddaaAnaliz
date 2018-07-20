@@ -4,7 +4,7 @@ import recipe as tktable
 import sqlite3
 
 __author__ = "Musa Ecer"
-__version__ = "0.3"
+__version__ = "0.4"
 __email__ = "musaecer@gmail.com"
 
 class mainWindow(tk.Tk):
@@ -49,8 +49,11 @@ class mainWindow(tk.Tk):
         # Veritabanı ilişiği:
         self.conn = sqlite3.connect("veri.db")
         self.c = self.conn.cursor()
+        # Tablo nesnesi:
+        self.tablo = tktable.Table(self, ["Lig", "Ev", "Deplasman", "İY", "MS", "1", "X", "2", "İY1", "İY0", "İY2", "KG Var", "KG Yok", "Alt", "Üst", "TG 0-1", "TG 2-3", "TG 4-6", "TG 7+"], column_minwidths=[None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None])
 
     def arama_yap(self, *args):
+        self.tablo.grid_forget()
         try:
             ms1 = format(float(self.giris_ms1.get().replace(",",".").strip()), '.2f')
             ms0 = format(float(self.giris_ms0.get().replace(",",".").strip()), '.2f')
@@ -68,8 +71,8 @@ class mainWindow(tk.Tk):
             with open("last", "w") as f:
                 f.write("{0}\n{1}\n{2}".format(ms1, ms0, ms2))
         
-        tablo = tktable.Table(self, ["Lig", "Ev", "Deplasman", "İY", "MS", "1", "X", "2", "İY1", "İY0", "İY2", "KG Var", "KG Yok", "Alt", "Üst", "TG 0-1", "TG 2-3", "TG 4-6", "TG 7+"], column_minwidths=[None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None])
-        
+        self.tablo.set_data([[]])
+        self.tablo.delete_row(1)
         
         ust = 0
         alt = 0
@@ -77,7 +80,7 @@ class mainWindow(tk.Tk):
         toplama_katilmayacak_mac_sayisi = 0
         
         for i in ham_veri_listesi:
-            tablo.insert_row(i)
+            self.tablo.insert_row(i)
             try:
                 toplamgol+=(int(i[4][0]) + int(i[4][-1]))
                 if (int(i[4][0]) + int(i[4][-1])) > 2.5:
@@ -96,13 +99,13 @@ class mainWindow(tk.Tk):
             self.dinamik_etiket_ust.configure(text="Üst Bitme Oranı: % {}".format(round(ustoran*100, 2)))
             self.dinamik_etiket_toplam_mac.configure(text="Toplam bulunan maç: {}".format(len(ham_veri_listesi)))
             self.dinamik_etiket_ortalama_gol.configure(text="Ortalama gol sayısı: {}".format(round(toplamgoloran, 2)))
-            tablo.grid(row=8,column=0,columnspan=2)
+            self.tablo.grid(row=8,column=0,columnspan=2)
             self.update()
 
         else:
             msgbox.showerror("Hata","Girilen oranlarla aynı orana sahip maç bulunamadı.")
-            self.dinamik_etiket_alt.configure(text="Üst Bitme Oranı:")
-            self.dinamik_etiket_ust.configure(text="Alt Bitme Oranı:")
+            self.dinamik_etiket_alt.configure(text="Alt Bitme Oranı:")
+            self.dinamik_etiket_ust.configure(text="Üst Bitme Oranı:")
             self.dinamik_etiket_toplam_mac.configure(text="Toplam bulunan maç: 0")
             self.dinamik_etiket_ortalama_gol.configure(text="Ortalama gol sayısı:")
 
