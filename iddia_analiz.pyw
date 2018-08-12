@@ -4,7 +4,7 @@ import recipe as tktable
 import sqlite3
 
 __author__ = "Musa Ecer"
-__version__ = "0.4"
+__version__ = "0.5"
 __email__ = "musaecer@gmail.com"
 
 class mainWindow(tk.Tk):
